@@ -1,0 +1,88 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Project Specific - Data (PRIVACY + SIZE)
+# data/
+# *.db
+*.sqlite
+*.sqlite3
+# *.csv
+!raw_data/*.csv
+backups/
+
+# Project Specific - Scripts (Testing only)
+scripts/
+test_*.py
+debug_*.py
+
+# Config (Sensitive)
+# config/config.yaml
+.env
+*.key
+
+# Models (Large files - use Git LFS or external storage)
+models/*.pt
+models/*.h5
+models/*.onnx
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Video/Images (if too large)
+*.mp4
+*.avi
+*.mov
+raw_images/
+training_data/

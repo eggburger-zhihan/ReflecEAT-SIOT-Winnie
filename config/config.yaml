@@ -1,0 +1,322 @@
+# ============================================================================
+# SmartSnack Monitor - System Configuration
+# ============================================================================
+# Purpose: Centralized configuration for all system components
+# Author: Winnie (DE4-SIOT Final Project)
+# Date: 2024-12-02
+# ============================================================================
+
+# ============================================================================
+# PROJECT METADATA
+# ============================================================================
+project:
+  name: "SmartSnack Monitor"
+  version: "1.0.0"
+  author: "Winnie"
+  course: "DE4-SIOT"
+  institution: "Imperial College London"
+  deadline: "2024-12-12"
+
+# ============================================================================
+# DATABASE CONFIGURATION
+# ============================================================================
+database:
+  path: "data/smartsnack.db"
+  csv_backup_dir: "data/csv_backup"
+  auto_backup: true
+  backup_interval_minutes: 60
+
+# ============================================================================
+# MODEL PATHS
+# ============================================================================
+models:
+  emotion:
+    model_path: "models/emotion/fer2013_mini_XCEPTION.hdf5"
+    input_size: [48, 48]
+    color_mode: "grayscale"
+    
+  food:
+    custom_yolo:
+      model_path: "models/food/best.pt"
+      confidence_threshold: 0.5  # SNACK_CONF_THR
+      imgsz: 416  # YOLO_IMGSZ
+      classes:
+        - "chip"
+        - "nutella"
+        - "cookie"
+        - "baby_carrot"
+        - "cherry_tomato"
+    
+    coco_yolo:
+      model_path: "models/yolo/yolov8s.pt"
+      confidence_threshold: 0.8  # COCO_CONF_THR
+      imgsz: 416
+      wanted_classes:
+        46: "banana"
+        47: "apple"
+        54: "donut"
+
+# ============================================================================
+# DETECTION CONFIGURATION
+# ============================================================================
+detection:
+  # Frame Processing (性能优化)
+  frame:
+    skip_emotion: 3  # FRAME_SKIP_EMOTION: 每3帧推理一次
+    skip_food: 5     # FRAME_SKIP_FOOD: 每5帧推理一次
+    resize_width: 640
+    resize_height: 480
+  
+  # Fusion Detection Strategy
+  fusion:
+    iou_conflict_threshold: 0.3  
+    donut_base_threshold: 0.5    
+    
+    # Model Weights (W_MODEL)
+    model_weights:
+      snack: 1.0
+      coco: 1.0
+    
+    # Class Weights (W_CLASS)
+    class_weights:
+      nutella: 0.9        
+      banana: 1.2         
+      donut: 1.1
+      apple: 1.0
+      chip: 1.0
+      cookie: 1.0
+      baby_carrot: 1.0
+      cherry_tomato: 1.0
+  
+  # Cooldown System (COOLDOWN_WINDOWS)
+  cooldown:
+    enabled: true
+    windows:  # unit: second
+      chip: 20
+      nutella: 60
+      cookie: 50
+      donut: 200
+      baby_carrot: 40
+      cherry_tomato: 30
+      banana: 200
+      apple: 300
+
+# ============================================================================
+# EMOTION RECOGNITION CONFIGURATION
+# ============================================================================
+emotion:
+  # 4-class mapping (research-oriented naming for SAD study)
+  # positive: happy
+  # negative_low: sad  
+  # negative_high: angry, disgust, fear
+  # neutral: neutral
+  # NOTE: surprise is EXCLUDED (ambiguous valence)
+  
+  # FER2013 7-class to 4-class mapping
+  # FER2013 indices: 0=angry, 1=disgust, 2=fear, 3=happy, 4=sad, 5=surprise, 6=neutral
+  fer2013_mapping:
+    0: "negative_high"  # angry
+    1: "negative_high"  # disgust
+    2: "negative_high"  # fear
+    3: "positive"       # happy
+    4: "negative_low"   # sad
+    5: null             # surprise - EXCLUDED
+    6: "neutral"        # neutral
+  
+  # DSP Smoothing Filter
+  dsp_filter:
+    enabled: true
+    window_size: 5
+  
+  # Sensitivity calibration (amplify/suppress signals)
+  sensitivity:
+    positive: 1.5
+    negative_low: 2.5
+    negative_high: 2.0
+    neutral: 1.0
+
+# ============================================================================
+# HEALTH CLASSIFICATION
+# ============================================================================
+health_classification:
+  # Food categories (HEALTHY_SNACKS, UNHEALTHY_SNACKS)
+  healthy_foods:
+    - "baby_carrot"
+    - "cherry_tomato"
+    - "banana"
+    - "apple"
+  
+  unhealthy_foods:
+    - "chip"
+    - "nutella"
+    - "cookie"
+    - "donut"
+  
+  # Calorie data per serving (CALORIES)
+  calories:
+    cherry_tomato: 5    
+    baby_carrot: 4      
+    banana: 90          
+    apple: 95           
+    donut: 260          
+    chip: 10           
+    cookie: 46          
+    nutella: 115        
+
+# ============================================================================
+# UI CONFIGURATION (COLORS)
+# ============================================================================
+ui:
+  colors:
+    positive: [185, 250, 202]        
+    negative_low: [228, 197, 250]    
+    negative_high: [192, 235, 252]   
+    neutral: [245, 252, 179]         
+  
+  display:
+    show_bounding_boxes: true
+    show_confidence_scores: true
+    show_emotion_labels: true
+    font_scale: 0.6
+    thickness: 2
+
+# ============================================================================
+# PERCEPTION LAYER - CAMERA
+# ============================================================================
+camera:
+  device_id: 0
+  resolution:
+    width: 1280
+    height: 720
+  fps: 30
+  auto_focus: true
+  
+  # Face detection for emotion recognition
+  face_detection:
+    method: "haarcascade"
+    cascade_path: "haarcascade_frontalface_default.xml"
+    scale_factor: 1.3
+    min_neighbors: 5
+    min_size: [30, 30]
+
+# ============================================================================
+# PERCEPTION LAYER - ARDUINO
+# ============================================================================
+arduino:
+  serial:
+    port: "/dev/cu.usbmodem1101"  
+    baudrate: 9600
+    timeout: 2
+    auto_detect: true
+  
+  sensors:
+    light:
+      type: "BH1750"
+      i2c_address: 0x23
+      mode: "CONTINUOUS_HIGH_RES_MODE"
+      read_interval_seconds: 60
+  
+  actuators:
+    led:
+      pin: 13
+      warning_duration_seconds: 3
+    
+    servo:
+      pin: 9
+      warning_angle: 90
+      rest_angle: 0
+      speed: 50
+
+# ============================================================================
+# PERCEPTION LAYER - WEATHER API
+# ============================================================================
+weather:
+  api:
+    provider: "OpenWeatherMap"
+    api_key: "b1fc5dcdd73adc70ee25cba2980efffc"
+    base_url: "https://api.openweathermap.org/data/2.5/weather"
+  
+  location:
+    city: "London"
+    country_code: "GB"
+    latitude: 51.5074
+    longitude: -0.1278
+  
+  update_interval_minutes: 30
+  
+  lux_estimation:
+    "Clear": 100000
+    "Clouds": 20000
+    "Rain": 10000
+    "Drizzle": 15000
+    "Thunderstorm": 5000
+    "Snow": 8000
+    "Mist": 10000
+    "Fog": 5000
+
+# ============================================================================
+# THREADING CONFIGURATION
+# ============================================================================
+threads:
+  emotion_monitor:
+    enabled: true
+    interval_minutes: 2
+    priority: "normal"
+  
+  light_monitor:
+    enabled: true
+    interval_minutes: 1
+    priority: "normal"
+  
+  weather_monitor:
+    enabled: true
+    interval_minutes: 30
+    priority: "low"
+  
+  food_detection:
+    enabled: true
+    priority: "high"
+
+# ============================================================================
+# ACTUATION LAYER
+# ============================================================================
+actuation:
+  warning:
+    trigger_on_unhealthy: true
+    trigger_on_calories_above: 150
+    led_enabled: true
+    servo_enabled: true
+  
+  feedback:
+    visual: true
+    physical: true
+    audio: false
+
+# ============================================================================
+# LOGGING CONFIGURATION
+# ============================================================================
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  files:
+    main_log: "logs/smartsnack.log"
+    error_log: "logs/errors.log"
+    detection_log: "logs/detections.log"
+  
+  console:
+    enabled: true
+    color: true
+
+# ============================================================================
+# ANALYSIS CONFIGURATION
+# ============================================================================
+analysis:
+  emotion_window:
+    minutes_before: 10
+    minutes_after: 10
+  
+  reports:
+    auto_generate: true
+    output_dir: "results/analysis_plots"
+    formats: ["png", "pdf"]

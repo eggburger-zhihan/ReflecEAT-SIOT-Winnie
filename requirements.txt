@@ -1,0 +1,27 @@
+# Core Dependencies
+ultralytics==8.0.196          # YOLOv8 object detection
+opencv-python==4.8.1.78       # Computer vision
+tensorflow==2.13.0            # FER2013 emotion recognition
+numpy==1.24.3                 # Numerical computing
+pandas==2.0.3                 # Data manipulation
+
+# IoT & Hardware
+pyserial==3.5                 # Arduino serial communication
+
+# Database
+supabase==1.0.3               # Cloud database sync
+python-dotenv==1.0.0          # Environment variables
+
+# Dashboard
+streamlit==1.28.0             # Web dashboard
+plotly==5.17.0                # Interactive visualizations
+altair==5.1.2                 # Statistical visualizations
+
+# API & Web
+requests==2.31.0              # HTTP requests (weather API)
+pyyaml==6.0.1                 # Config file parsing
+
+# Utilities
+pillow==10.0.1                # Image processing
+python-dateutil==2.8.2        # Date/time utilities
+scipy==1.11.3                 # Scientific computing (correlation analysis)
