@@ -1,11 +1,6 @@
 # ReflecEAT - Smart Snack Monitor
-
 **Investigating SAD-Induced Emotional Eating through Closed-Loop IoT Intervention**
-
-Imperial College London | Design Engineering | DESE71003
-
 ---
-
 ## Overview
 ReflecEAT is an IoT system designed to monitor and modulate stress-eating behaviors triggered by Seasonal Affective Disorder (SAD). The system integrates computer vision, emotion recognition, environmental sensing, and real-time physical feedback.
 
@@ -16,12 +11,16 @@ ReflecEAT is an IoT system designed to monitor and modulate stress-eating behavi
 - Closed-loop physical feedback (servo actuators)
 - Cloud-synced data pipeline (SQLite + Supabase)
 - Interactive web dashboard (Streamlit)
-
 ---
-
 ## Links
-
 **Live Dashboard:** https://refleceat-dashboard-chr55qni6kwgbncegnvsie.streamlit.app
+ In the **Date Selection** panel on the left:
+   - Select **"Date Range"** mode
+   - Set **From:** 2025-11-28
+   - Set **To:** 2025-12-09
+   - Data outside this date range represents system testing and development phases,
+   - not formal data collection.
+   - Only the 12-day period above was conducted under controlled longitudinal study conditions for academic analysis!!!
 
 **Demo Video:** https://www.youtube.com/watch?v=EnHUkz9vp2A&feature=youtu.be
 
