@@ -7,7 +7,6 @@ Imperial College London | Design Engineering | DESE71003
 ---
 
 ## Overview
-
 ReflecEAT is an IoT system designed to monitor and modulate stress-eating behaviors triggered by Seasonal Affective Disorder (SAD). The system integrates computer vision, emotion recognition, environmental sensing, and real-time physical feedback.
 
 **Key Features:**
@@ -83,7 +82,7 @@ SmartSnackMonitor/
 │   ├── smartsnack.db           SQLite database (12-day study)
 │   ├── emotion_log.csv         3,456 emotion entries
 │   ├── food_event_log.csv      237 food events
-│   ├── indoor_light_log.csv    Environmental readings
+│   ├── environmental_light_log.csv    Environmental readings
 │   └── weather_log.csv         Weather API data
 ├── arduino/
 │   └── smartsnack_monitor.ino  Arduino firmware
@@ -94,14 +93,10 @@ SmartSnackMonitor/
 
 ---
 
-## Quick Start
-
-### Prerequisites
-
 - Python 3.9+
 - Arduino IDE
 - Webcam
-- Arduino Uno + BH1750 sensor + SG90 servos
+- Arduino Uno + BH1750 sensor + SG90 servos *2 + Red LED
 
 ---
 
@@ -109,16 +104,16 @@ SmartSnackMonitor/
 
 The system recognizes 8 food categories (5 custom + 3 COCO):
 
-| Category | Type | Calories | Model |
-|----------|------|----------|-------|
-| Chip | Unhealthy | 160 kcal | Custom YOLOv8 |
-| Cookie | Unhealthy | 240 kcal | Custom YOLOv8 |
-| Nutella | Unhealthy | 200 kcal | Custom YOLOv8 |
-| Donut | Unhealthy | 230 kcal | COCO |
-| Cherry Tomato | Healthy | 4 kcal | Custom YOLOv8 |
-| Baby Carrot | Healthy | 4 kcal | Custom YOLOv8 |
-| Apple | Healthy | 95 kcal | COCO |
-| Banana | Healthy | 105 kcal | COCO |
+| Category | Type | Model |
+|----------|------|-------|
+| Chip | Unhealthy | Custom YOLOv8 |
+| Cookie | Unhealthy | Custom YOLOv8 |
+| Nutella | Unhealthy | Custom YOLOv8 |
+| Donut | Unhealthy | COCO |
+| Cherry Tomato | Healthy | Custom YOLOv8 |
+| Baby Carrot | Healthy | Custom YOLOv8 |
+| Apple | Healthy | COCO |
+| Banana | Healthy | COCO |
 
 ---
 
